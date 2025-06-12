@@ -1,5 +1,7 @@
 package devandroid.raik.applistacurso.View;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,12 +14,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import devandroid.raik.applistacurso.Controller.PessoaController;
 import devandroid.raik.applistacurso.Model.Pessoa;
 import devandroid.raik.applistacurso.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    SharedPreferences preferences;
+    public static final String NOME_PREFERENCES = "pref_listvip";
+
     Pessoa pessoa;
+    PessoaController controller;
 
     EditText editNome;
     EditText editSobNome;
@@ -39,7 +46,13 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        preferences = getSharedPreferences(NOME_PREFERENCES, 0);
+        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor listaVip = preferences.edit();
+
+
         pessoa = new Pessoa();
+        controller = new PessoaController();
+        controller.logDebug();
 
         pessoa.setPrimeiroNome("Antonio");
         pessoa.setSobreNome("Silva");
@@ -88,6 +101,14 @@ public class MainActivity extends AppCompatActivity {
                 pessoa.setTelefoneContato(editTelContato.getText().toString());
 
                 Toast.makeText(MainActivity.this, "Salvo", Toast.LENGTH_LONG).show();
+
+                listaVip.putString("primeiroNome",pessoa.getPrimeiroNome());
+                listaVip.putString("sobreNome",pessoa.getSobreNome());
+                listaVip.putString("cursoDesejado",pessoa.getCursoDesejado());
+                listaVip.putString("telefoneContato",pessoa.getTelefoneContato());
+                listaVip.apply();
+
+                controller.salvar(pessoa);
             }
         });
     }
