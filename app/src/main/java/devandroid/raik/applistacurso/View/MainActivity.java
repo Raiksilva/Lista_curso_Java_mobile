@@ -50,14 +50,15 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("CommitPrefEdits") SharedPreferences.Editor listaVip = preferences.edit();
 
 
-        pessoa = new Pessoa();
+
         controller = new PessoaController();
         controller.logDebug();
 
-        pessoa.setPrimeiroNome("Antonio");
-        pessoa.setSobreNome("Silva");
-        pessoa.setCursoDesejado("Java");
-        pessoa.setTelefoneContato("81 9 9930-1025");
+        pessoa = new Pessoa();
+        pessoa.setPrimeiroNome(preferences.getString("primeiroNome", ""));
+        pessoa.setSobreNome(preferences.getString("sobreNome", ""));
+        pessoa.setCursoDesejado(preferences.getString("cursoDesejado", ""));
+        pessoa.setTelefoneContato(preferences.getString("telefoneContato", ""));
 
 
         editNome = findViewById(R.id.editNome);
