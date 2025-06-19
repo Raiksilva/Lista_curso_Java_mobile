@@ -21,6 +21,9 @@ import devandroid.raik.applistacurso.R;
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
+
+    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor listaVip;
+
     public static final String NOME_PREFERENCES = "pref_listvip";
 
     Pessoa pessoa;
@@ -47,9 +50,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         preferences = getSharedPreferences(NOME_PREFERENCES, 0);
-        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor listaVip = preferences.edit();
-
-
+        listaVip = preferences.edit();
 
         controller = new PessoaController();
         controller.logDebug();
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         pessoa.setSobreNome(preferences.getString("sobreNome", ""));
         pessoa.setCursoDesejado(preferences.getString("cursoDesejado", ""));
         pessoa.setTelefoneContato(preferences.getString("telefoneContato", ""));
-
 
         editNome = findViewById(R.id.editNome);
         editSobNome = findViewById(R.id.editSobNome);
@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
                 editSobNome.setText("");
                 editNomeCurso.setText("");
                 editTelContato.setText("");
+
+                listaVip.clear();
+                listaVip.apply();
+
             }
         });
 
