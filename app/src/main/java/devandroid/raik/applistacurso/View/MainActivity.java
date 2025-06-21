@@ -20,11 +20,7 @@ import devandroid.raik.applistacurso.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    SharedPreferences preferences;
 
-    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor listaVip;
-
-    public static final String NOME_PREFERENCES = "pref_listvip";
 
     Pessoa pessoa;
     PessoaController controller;
@@ -49,17 +45,12 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        preferences = getSharedPreferences(NOME_PREFERENCES, 0);
-        listaVip = preferences.edit();
 
-        controller = new PessoaController();
+        controller = new PessoaController(MainActivity.this);
         controller.logDebug();
 
         pessoa = new Pessoa();
-        pessoa.setPrimeiroNome(preferences.getString("primeiroNome", ""));
-        pessoa.setSobreNome(preferences.getString("sobreNome", ""));
-        pessoa.setCursoDesejado(preferences.getString("cursoDesejado", ""));
-        pessoa.setTelefoneContato(preferences.getString("telefoneContato", ""));
+        controller.buscar(pessoa);
 
         editNome = findViewById(R.id.editNome);
         editSobNome = findViewById(R.id.editSobNome);
@@ -83,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 editNomeCurso.setText("");
                 editTelContato.setText("");
 
-                listaVip.clear();
-                listaVip.apply();
+              controller.limpar();
 
             }
         });
@@ -106,12 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 pessoa.setTelefoneContato(editTelContato.getText().toString());
 
                 Toast.makeText(MainActivity.this, "Salvo", Toast.LENGTH_LONG).show();
-
-                listaVip.putString("primeiroNome",pessoa.getPrimeiroNome());
-                listaVip.putString("sobreNome",pessoa.getSobreNome());
-                listaVip.putString("cursoDesejado",pessoa.getCursoDesejado());
-                listaVip.putString("telefoneContato",pessoa.getTelefoneContato());
-                listaVip.apply();
 
                 controller.salvar(pessoa);
             }
