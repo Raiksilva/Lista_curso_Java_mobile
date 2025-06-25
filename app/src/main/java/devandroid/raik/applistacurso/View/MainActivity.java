@@ -14,7 +14,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.List;
+
+import devandroid.raik.applistacurso.Controller.CursoController;
 import devandroid.raik.applistacurso.Controller.PessoaController;
+import devandroid.raik.applistacurso.Model.Curso;
 import devandroid.raik.applistacurso.Model.Pessoa;
 import devandroid.raik.applistacurso.R;
 
@@ -24,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
     Pessoa pessoa;
     PessoaController controller;
+
+    CursoController cursoController;
+
+    List<Curso> listaDeCurso;
 
     EditText editNome;
     EditText editSobNome;
@@ -45,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        cursoController = new CursoController();
+
+        listaDeCurso = cursoController.getListaDeCursos();
 
         controller = new PessoaController(MainActivity.this);
-        controller.logDebug();
 
         pessoa = new Pessoa();
         controller.buscar(pessoa);
