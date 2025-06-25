@@ -1,11 +1,11 @@
 package devandroid.raik.applistacurso.View;
 
-import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,7 +18,6 @@ import java.util.List;
 
 import devandroid.raik.applistacurso.Controller.CursoController;
 import devandroid.raik.applistacurso.Controller.PessoaController;
-import devandroid.raik.applistacurso.Model.Curso;
 import devandroid.raik.applistacurso.Model.Pessoa;
 import devandroid.raik.applistacurso.R;
 
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     CursoController cursoController;
 
-    List<Curso> listaDeCurso;
+    List<String> nomeDosCursos;
 
     EditText editNome;
     EditText editSobNome;
@@ -41,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     Button  btnLimpar;
     Button  btnSalvar;
     Button  btnFinalizar;
+
+    Spinner listasCursos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         cursoController = new CursoController();
 
-        listaDeCurso = cursoController.getListaDeCursos();
+        nomeDosCursos = cursoController.dadosParaSpinner();
 
         controller = new PessoaController(MainActivity.this);
 
@@ -66,10 +67,18 @@ public class MainActivity extends AppCompatActivity {
         editSobNome = findViewById(R.id.editSobNome);
         editNomeCurso = findViewById(R.id.editNomeCurso);
         editTelContato = findViewById(R.id.editTelContato);
+        listasCursos = findViewById(R.id.spinnerSelectCurso);
 
         btnSalvar = findViewById(R.id.btnSalvar);
         btnLimpar = findViewById(R.id.btnLimpar);
         btnFinalizar = findViewById(R.id.btnFinalizar);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                cursoController.dadosParaSpinner());
+
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+
+        listasCursos.setAdapter(adapter);
 
         editNome.setText(pessoa.getPrimeiroNome());
         editSobNome.setText(pessoa.getSobreNome());
