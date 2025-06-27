@@ -1,11 +1,11 @@
 package devandroid.raik.applistacurso.View;
 
-import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,6 +14,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.List;
+
+import devandroid.raik.applistacurso.Controller.CursoController;
 import devandroid.raik.applistacurso.Controller.PessoaController;
 import devandroid.raik.applistacurso.Model.Pessoa;
 import devandroid.raik.applistacurso.R;
@@ -25,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
     Pessoa pessoa;
     PessoaController controller;
 
+    CursoController cursoController;
+
+    List<String> nomeDosCursos;
+
     EditText editNome;
     EditText editSobNome;
     EditText editNomeCurso;
@@ -34,20 +41,24 @@ public class MainActivity extends AppCompatActivity {
     Button  btnSalvar;
     Button  btnFinalizar;
 
+    Spinner listasCursos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_spinner);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        cursoController = new CursoController();
+
+        nomeDosCursos = cursoController.dadosParaSpinner();
 
         controller = new PessoaController(MainActivity.this);
-        controller.logDebug();
 
         pessoa = new Pessoa();
         controller.buscar(pessoa);
@@ -56,10 +67,18 @@ public class MainActivity extends AppCompatActivity {
         editSobNome = findViewById(R.id.editSobNome);
         editNomeCurso = findViewById(R.id.editNomeCurso);
         editTelContato = findViewById(R.id.editTelContato);
+        listasCursos = findViewById(R.id.spinnerSelectCurso);
 
         btnSalvar = findViewById(R.id.btnSalvar);
         btnLimpar = findViewById(R.id.btnLimpar);
         btnFinalizar = findViewById(R.id.btnFinalizar);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,
+                cursoController.dadosParaSpinner());
+
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+
+        listasCursos.setAdapter(adapter);
 
         editNome.setText(pessoa.getPrimeiroNome());
         editSobNome.setText(pessoa.getSobreNome());
